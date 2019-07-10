@@ -25,22 +25,21 @@ class Robot : public frc::TimedRobot {
   void TestPeriodic() override;
 
  private:
-  frc::SendableChooser<std::string> m_chooser;
-  const std::string kAutoNameDefault = "Default";
-  const std::string kAutoNameCustom = "My Auto";
-  std::string m_autoSelected;
+
+
   UDPClient * metrics =   metrics = new UDPClient;
 
  const int rMotorFrontNum = 13;
 const int rMotorBackNum = 16;
  const int lMotorFrontNum = 2;
  const int lMotorBackNum = 3;
+ const int driveMotorCurrentLimit = 40;
 
-   frc::RobotDrive * drive = new frc::RobotDrive(lMotorFrontNum, rMotorFrontNum, lMotorBackNum, rMotorFrontNum);
+  frc::RobotDrive * robot = new frc::RobotDrive(lMotorFrontNum, rMotorFrontNum, lMotorBackNum, rMotorFrontNum);
 
   rev::CANSparkMax * lMotorFront = new rev::CANSparkMax(lMotorFrontNum, rev::CANSparkMax::MotorType::kBrushless);
   rev::CANSparkMax * lMotorBack = new rev::CANSparkMax(lMotorBackNum, rev::CANSparkMax::MotorType::kBrushless);
   rev::CANSparkMax * rMotorBack = new rev::CANSparkMax(rMotorBackNum, rev::CANSparkMax::MotorType::kBrushless);
-   rev::CANSparkMax * rMotorFront = new rev::CANSparkMax(rMotorFrontNum, rev::CANSparkMax::MotorType::kBrushless);
-;
+  rev::CANSparkMax * rMotorFront = new rev::CANSparkMax(rMotorFrontNum, rev::CANSparkMax::MotorType::kBrushless);
+
 };
