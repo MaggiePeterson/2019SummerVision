@@ -26,14 +26,15 @@ class Robot : public frc::TimedRobot {
 
  private:
 
+  const int rMotorFrontNum = 13;
+  const int rMotorBackNum = 16;
+  const int lMotorFrontNum = 2;
+  const int lMotorBackNum = 3;
+  const int driveMotorCurrentLimit = 40;
+  const int ticksPerRev = 42;
+  const double wheelCircumference = 6 * 3.14159;
 
   UDPClient * metrics =   metrics = new UDPClient;
-
- const int rMotorFrontNum = 13;
-const int rMotorBackNum = 16;
- const int lMotorFrontNum = 2;
- const int lMotorBackNum = 3;
- const int driveMotorCurrentLimit = 40;
 
   frc::RobotDrive * robot = new frc::RobotDrive(lMotorFrontNum, rMotorFrontNum, lMotorBackNum, rMotorFrontNum);
 

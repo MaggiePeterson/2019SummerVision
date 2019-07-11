@@ -31,7 +31,7 @@ class UDPClient{
     UDPClient();
     void setup_socket();
     void read();
-    int getAngle();
-    int getDistance();
+    double getAngle();
+    double getDistance();
 
 };

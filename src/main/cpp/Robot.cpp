@@ -18,8 +18,14 @@ void Robot::RobotInit() {
     lMotorFront->SetSmartCurrentLimit(driveMotorCurrentLimit);
     rMotorBack->SetSmartCurrentLimit(driveMotorCurrentLimit);
     lMotorBack->SetSmartCurrentLimit(driveMotorCurrentLimit);
-   metrics->setup_socket();
-   //thread UDPthread(&UDPClient::read);
+    metrics->setup_socket();
+
+    rMotorFront->SetInverted(true);
+    rMotorBack->Follow(*rMotorFront, false);
+    lMotorFront->SetInverted(false);
+    lMotorBack->Follow(*lMotorFront, false);
+
+    metrics->read();
 }
 
 /**
@@ -48,15 +54,13 @@ void Robot::AutonomousInit() {
 }
 
 void Robot::AutonomousPeriodic() {
-  int angle = metrics->getAngle();
-  int distance = metrics->getDistance();
+  double angle = metrics->getAngle();
+  double distance = metrics->getDistance();
 
-  
-
-
-
-  
-
+  //convert inches to ticks
+  double ticks = distance / wheelCircumference;
+  rMotorFront->GetPIDController().SetReference(ticks, rev::ControlType::kPosition, 0, 0);
+  lMotorFront->GetPIDController().SetReference(ticks, rev::ControlType::kPosition, 0, 0);
   
 }
 

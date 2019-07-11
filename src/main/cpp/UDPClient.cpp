@@ -32,15 +32,15 @@ void UDPClient::setup_socket(){
     bind(bCastSock, (struct sockaddr *)&localUdp,sizeof(localUdp)); 
 }
 
-int UDPClient::getAngle(){
-    int angle, distance;
+double UDPClient::getAngle(){
+    double angle, distance;
     istringstream iss(buffer);
     iss >> angle >> distance;
     return angle;
 }
 
-int UDPClient::getDistance(){
-    int ang, distance;
+double UDPClient::getDistance(){
+    double ang, distance;
     istringstream iss(buffer);
     iss >> ang >> distance;
     return distance;
