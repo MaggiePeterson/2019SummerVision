@@ -9,6 +9,8 @@ void UDPClient::read(){
         cout << "Waiting for broadcast..." <<endl;
         memset(&bCastRecv, '0', sizeof(bCastRecv));
         currPacket = recvfrom(bCastSock, buffer, MAX_BUFF, 0, (struct sockaddr *) &bCastRecv, &addrlen);
+        istringstream iss(buffer);
+        iss >> angle >> distance;
     }while(currPacket != -1);
      
 }
@@ -33,15 +35,9 @@ void UDPClient::setup_socket(){
 }
 
 double UDPClient::getAngle(){
-    double angle, distance;
-    istringstream iss(buffer);
-    iss >> angle >> distance;
     return angle;
 }
 
 double UDPClient::getDistance(){
-    double ang, distance;
-    istringstream iss(buffer);
-    iss >> ang >> distance;
     return distance;
 }

@@ -27,6 +27,8 @@ class UDPClient{
     char buffer[MAX_BUFF] = {0}; 
     struct sockaddr_in serv_addr; 
     ssize_t currPacket;
+    double angle;
+    double distance;
     
     UDPClient();
     void setup_socket();
