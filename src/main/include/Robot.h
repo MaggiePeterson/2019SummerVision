@@ -12,6 +12,7 @@
 #include "UDPClient.h"
 #include <frc/RobotDrive.h>
 #include <frc/TimedRobot.h>
+#include "SFDrive_SparkMax.h"
 #include <frc/smartdashboard/SendableChooser.h>
 
 class Robot : public frc::TimedRobot {
@@ -33,14 +34,19 @@ class Robot : public frc::TimedRobot {
   const int driveMotorCurrentLimit = 40;
   const int ticksPerRev = 42;
   const double wheelCircumference = 6 * 3.14159;
+  const double pConstantDrive = 0;
+  const double iConstantDrive = 0;
+  const double dConstantDrive = 0;
+  const double fConstantDrive = 0;
 
   UDPClient * metrics =   metrics = new UDPClient;
-
-  frc::RobotDrive * robot = new frc::RobotDrive(lMotorFrontNum, rMotorFrontNum, lMotorBackNum, rMotorFrontNum);
 
   rev::CANSparkMax * lMotorFront = new rev::CANSparkMax(lMotorFrontNum, rev::CANSparkMax::MotorType::kBrushless);
   rev::CANSparkMax * lMotorBack = new rev::CANSparkMax(lMotorBackNum, rev::CANSparkMax::MotorType::kBrushless);
   rev::CANSparkMax * rMotorBack = new rev::CANSparkMax(rMotorBackNum, rev::CANSparkMax::MotorType::kBrushless);
   rev::CANSparkMax * rMotorFront = new rev::CANSparkMax(rMotorFrontNum, rev::CANSparkMax::MotorType::kBrushless);
+
+  SFDrive_SparkMax * robot = new SFDrive_SparkMax(lMotorFront, rMotorFront, pConstantDrive, iConstantDrive, dConstantDrive, fConstantDrive);
+
 
 };

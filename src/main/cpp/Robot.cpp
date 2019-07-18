@@ -54,13 +54,9 @@ void Robot::AutonomousInit() {
 }
 
 void Robot::AutonomousPeriodic() {
+  
   double angle = metrics->getAngle();
   double distance = metrics->getDistance();
-
-  //convert inches to ticks
-  double ticks = distance / wheelCircumference;
-  rMotorFront->GetPIDController().SetReference(ticks, rev::ControlType::kPosition, 0, 0);
-  lMotorFront->GetPIDController().SetReference(ticks, rev::ControlType::kPosition, 0, 0);
   
 }
 
