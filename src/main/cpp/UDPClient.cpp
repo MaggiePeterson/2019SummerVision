@@ -1,19 +1,46 @@
 #include "UDPClient.h"
 
 UDPClient::UDPClient(){
-    cout<<"constructor..."<<endl;
+    
 }
 void UDPClient::read(){
 
    do{
+
+       if(stopThread){
+           stopThread = false;
+           break;
+       }
+
         cout << "Waiting for broadcast..." <<endl;
         memset(&bCastRecv, '0', sizeof(bCastRecv));
         currPacket = recvfrom(bCastSock, buffer, MAX_BUFF, 0, (struct sockaddr *) &bCastRecv, &addrlen);
         istringstream iss(buffer);
         iss >> angle >> distance;
     }while(currPacket != -1);
-     
+
+    threadFinished = true;
 }
+
+bool UDPClient::read_thread(){
+    stopThread = false;
+
+    if(UDPthread == nullptr){ //thread has not started
+        threadFinished = false;
+         UDPthread = new std::thread(&UDPClient::read, this);
+         return true;
+    }
+    if(threadFinished) //If there is a thread but it's done, delete it and make another one
+   {
+      threadFinished = false;
+      joinUDPThread(); //join
+      delete UDPthread;
+      UDPthread = new std::thread(&UDPClient::read, this);
+      return true;
+   }
+   return false; //If thread already executing, do nothing
+}
+
 
 void UDPClient::setup_socket(){
     if ((bCastSock = socket(PF_INET, SOCK_DGRAM, IPPROTO_UDP)) < 0) 
@@ -41,3 +68,15 @@ double UDPClient::getAngle(){
 double UDPClient::getDistance(){
     return distance;
 }
+
+ void UDPClient::joinUDPThread(){
+     if(UDPthread == nullptr || !UDPthread->joinable())
+        return;
+
+    UDPthread->join();
+ }
+
+  void UDPClient::stopUDPThread(){
+      joinUDPThread();
+      stopThread = false; 
+  }

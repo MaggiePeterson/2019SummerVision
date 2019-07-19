@@ -9,14 +9,15 @@
 #include <netinet/in.h>
 #include <iostream>
 #include <sstream>
+#include <thread>
 using namespace std; 
 #define PORT 5801
 #define MAX_BUFF 100000   
 
 class UDPClient{
 
-    public:
-     int bCastSock = 0;
+private:
+    int bCastSock = 0;
     int srcaddrSize;
     struct sockaddr_in localUdp; 
     struct sockaddr_in bCastRecv;
@@ -29,11 +30,22 @@ class UDPClient{
     ssize_t currPacket;
     double angle;
     double distance;
+    bool stopThread = false;
+    bool threadFinished = false;
+    std::thread * UDPthread = nullptr;
+
+
     
+public:
     UDPClient();
     void setup_socket();
-    void read();
+    void read(); 
+    bool read_thread();
     double getAngle();
     double getDistance();
+    void joinUDPThread();
+    void stopUDPThread();
+    
 
+   
 };
