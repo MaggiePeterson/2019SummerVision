@@ -1,28 +1,30 @@
 #include "UDPClient.h"
 
-UDPClient::UDPClient(){
-    
-}
+UDPClient::UDPClient(){}
+
 void UDPClient::read(){
 
    do{
-
-       if(stopThread){
+        if(stopThread){
            stopThread = false;
            break;
        }
 
-        cout << "Waiting for broadcast..." <<endl;
+        std::cout << "Waiting for broadcast..." <<std::endl;
         memset(&bCastRecv, '0', sizeof(bCastRecv));
         currPacket = recvfrom(bCastSock, buffer, MAX_BUFF, 0, (struct sockaddr *) &bCastRecv, &addrlen);
-        istringstream iss(buffer);
+        std::istringstream iss(buffer);
+        frc::DriverStation::ReportError("String before filled " + iss.str());
         iss >> angle >> distance;
-    }while(currPacket != -1);
+        frc::DriverStation::ReportError("Sttring " + iss.str());
+    } while(currPacket != -1); 
 
     threadFinished = true;
+
+
 }
 
-bool UDPClient::read_thread(){
+bool UDPClient::UDPReadThread(){
     stopThread = false;
 
     if(UDPthread == nullptr){ //thread has not started

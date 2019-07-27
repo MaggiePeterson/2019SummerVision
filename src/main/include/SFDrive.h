@@ -8,6 +8,8 @@
 #pragma once
 
 #include <thread>
+#include <frc/DriverStation.h>
+
 
 class SFDrive {
   public:
@@ -39,6 +41,8 @@ class SFDrive {
   void ArcadeDrive(double xSpeed, double zRotation);
   bool PIDDrive(float inches, float maxVel, float timeout = 4, bool ZeroVelocityAtEnd = true);
   bool PIDTurn(float degreesClockwise, float radius, float maxVel, float timeout = 4, bool ZeroVelocityAtEnd = true);
+void PIDTurnModified(float degreesClockwise, float maxAcc);
+
   void disableP();
   void enableP();
   void initPID();

@@ -14,6 +14,8 @@
 #include <frc/TimedRobot.h>
 #include "SFDrive_SparkMax.h"
 #include <frc/smartdashboard/SendableChooser.h>
+#include <frc/DriverStation.h>
+
 
 class Robot : public frc::TimedRobot {
  public:
@@ -24,6 +26,7 @@ class Robot : public frc::TimedRobot {
   void TeleopInit() override;
   void TeleopPeriodic() override;
   void TestPeriodic() override;
+  void DisabledInit() override;
 
  private:
 
@@ -34,10 +37,11 @@ class Robot : public frc::TimedRobot {
   const int driveMotorCurrentLimit = 40;
   const int ticksPerRev = 42;
   const double wheelCircumference = 6 * 3.14159;
-  const double pConstantDrive = 0;
-  const double iConstantDrive = 0;
+  const double pConstantDrive = 1;
+  const double iConstantDrive = 1;
   const double dConstantDrive = 0;
   const double fConstantDrive = 0;
+  const int maxAccel = 8000;
 
   UDPClient * metrics =   metrics = new UDPClient;
 

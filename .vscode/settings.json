@@ -10,5 +10,10 @@
     "bin/": true,
     ".classpath": true,
     ".project": true
+  },
+  "files.associations": {
+    "thread": "cpp",
+    "iosfwd": "cpp",
+    "ostream": "cpp"
   }
 }

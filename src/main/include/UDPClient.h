@@ -10,7 +10,9 @@
 #include <iostream>
 #include <sstream>
 #include <thread>
-using namespace std; 
+#include <mutex>
+#include <frc/DriverStation.h>
+
 #define PORT 5801
 #define MAX_BUFF 100000   
 
@@ -32,15 +34,21 @@ private:
     double distance;
     bool stopThread = false;
     bool threadFinished = false;
+    bool stopAngleThread = false;
+    bool stopDistanceThread = false;
+    bool isAngleThreadFinished = false;
+    bool isDistanceThreadFinished = false;
     std::thread * UDPthread = nullptr;
-
-
+    std::thread * angleThread = nullptr;
+    std::thread * distanceThread = nullptr;
+    std::mutex * UDPmutex = new std::mutex;
     
 public:
+
     UDPClient();
     void setup_socket();
     void read(); 
-    bool read_thread();
+    bool UDPReadThread();
     double getAngle();
     double getDistance();
     void joinUDPThread();
