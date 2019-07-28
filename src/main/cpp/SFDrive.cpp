@@ -226,7 +226,7 @@ bool SFDrive::PIDTurn(float degreesClockwise, float radius, float maxVel, float 
          currStepTime = Timer().GetFPGATimestamp();
          deltaTime = currStepTime - lastStepTime;
          lastStepTime = currStepTime;
-   //set point =  20 * t current/tfinal
+         
          if (endPoint - setPoint < (m_currVelocity * m_currVelocity) / (2 * m_maxAccl)) //check if you decelerated at the current speed
          {																		  //would you hit 0 before you reached the end point
             m_currVelocity -= m_maxAccl * deltaTime;
@@ -247,19 +247,14 @@ bool SFDrive::PIDTurn(float degreesClockwise, float radius, float maxVel, float 
 
          if (degreesClockwise > 0)
          {
-           // setLeftMotorSetpoint(setPoint * -1);
-             frc::DriverStation::ReportError("Setpoint: " + std::to_string(setPoint * -1));
-             frc::DriverStation::ReportError("Innerset: " + std::to_string(innerSet));
-
-
-          //  setRightMotorSetpoint(innerSet);
+            setLeftMotorSetpoint(setPoint * -1);
+            setRightMotorSetpoint(innerSet);
          }
          else
          {
-           // setLeftMotorSetpoint(innerSet * -1);
-          //  setRightMotorSetpoint(setPoint);
-           frc::DriverStation::ReportError("Setpoint: " + std::to_string(setPoint * -1));
-             frc::DriverStation::ReportError("Innerset: " + std::to_string(innerSet));
+            setLeftMotorSetpoint(innerSet * -1);
+            setRightMotorSetpoint(setPoint);
+           
          }
       }
    }
@@ -288,8 +283,8 @@ bool SFDrive::PIDTurn(float degreesClockwise, float radius, float maxVel, float 
 
          if (degreesClockwise > 0)
          {
-           // setLeftMotorSetpoint(setPoint * -1);
-           // setRightMotorSetpoint(innerSet);
+            setLeftMotorSetpoint(setPoint * -1);
+            setRightMotorSetpoint(innerSet);
          }
          else
          {
@@ -329,24 +324,34 @@ bool SFDrive::PIDTurnThread(float degreesClockwise, float radius, float maxVel, 
    return false; //If thread already executing, do nothing
 }
 
-void SFDrive::PIDTurnModified(float degreesClockwise, float maxAcc){
+void SFDrive::PIDTurnInPlace(float degreesClockwise, float maxAcc){
+
+   maxAcc = .1;
+
+   disableP();
+   setLeftMotorPosition(0);
+   setRightMotorPosition(0);
+   setLeftMotorSetpoint(0);
+   setRightMotorSetpoint(0);
+   enableP();
+
    int setPoint = ((abs(degreesClockwise)*(m_wheelTrack)*m_PI)/360.0) * (m_ticksPerRev/m_wheelCircumference);
-   double timeFinal = pow((degreesClockwise * m_wheelTrack * m_PI)/(180 * maxAcc), 0.5);
+   double timeFinal = pow((degreesClockwise * m_wheelTrack * m_PI)/(180.0 * maxAcc), 0.5); //time it takes to reach setpoint
 
    double timeStart = Timer().GetFPGATimestamp();
-
-   while(Timer().GetFPGATimestamp() < timeStart + timeFinal){
+   
+   while(Timer().GetFPGATimestamp() < timeStart + timeFinal){ //until reach time
 
       double setMotor = (Timer().GetFPGATimestamp() - timeStart)/timeFinal * setPoint;
 
-      if(degreesClockwise < 0 ){
+      if(degreesClockwise < 0 ){ //turn left
          setLeftMotorSetpoint(-setMotor);
          setRightMotorSetpoint(setMotor);
       }
-      if(degreesClockwise > 0 ){
+      if(degreesClockwise > 0 ){ //turn right
          setLeftMotorSetpoint(setMotor);
          setRightMotorSetpoint(-setMotor);
-      }
+      } 
 
    }
 

@@ -20,9 +20,9 @@ void Robot::RobotInit() {
     lMotorBack->SetSmartCurrentLimit(driveMotorCurrentLimit);
     metrics->setup_socket();
 
-    rMotorFront->SetInverted(true);
+    //rMotorFront->SetInverted(true);
     rMotorBack->Follow(*rMotorFront, false);
-    lMotorFront->SetInverted(false);
+   // lMotorFront->SetInverted(false);
     lMotorBack->Follow(*lMotorFront, false);
 
     metrics->setup_socket();
@@ -52,17 +52,24 @@ void Robot::RobotPeriodic() {}
  * make sure to add them to the chooser code above as well.
  */
 void Robot::AutonomousInit() {
+
+  
   metrics->UDPReadThread();
   
   double angle = metrics->getAngle();
   double distance = metrics->getDistance();
 
-  robot->PIDTurnModified(15, maxAccel);
+ // robot->PIDTurnInPlace(15, maxAccel);
   frc::DriverStation::ReportError("in auton");
+
+
 
 }
 
-void Robot::AutonomousPeriodic() {
+void Robot::AutonomousPeriodic() { 
+         
+   frc::DriverStation::ReportError("left: " + std::to_string(lMotorFront->GetEncoder().GetPosition()) + " right "+ std::to_string(rMotorFront->GetEncoder().GetPosition()));
+
 
  
 
@@ -72,7 +79,10 @@ void Robot::TeleopInit() {}
 
 void Robot::TeleopPeriodic() {}
 
-void Robot::TestPeriodic() {}
+void Robot::TestPeriodic() {
+
+
+}
 
 void Robot::DisabledInit(){
   

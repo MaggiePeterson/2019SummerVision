@@ -9,6 +9,8 @@
 
 #include <thread>
 #include <frc/DriverStation.h>
+#include <rev/CANSparkMax.h>
+
 
 
 class SFDrive {
@@ -41,7 +43,9 @@ class SFDrive {
   void ArcadeDrive(double xSpeed, double zRotation);
   bool PIDDrive(float inches, float maxVel, float timeout = 4, bool ZeroVelocityAtEnd = true);
   bool PIDTurn(float degreesClockwise, float radius, float maxVel, float timeout = 4, bool ZeroVelocityAtEnd = true);
-void PIDTurnModified(float degreesClockwise, float maxAcc);
+  void PIDTurnInPlace(float degreesClockwise, float maxAcc);
+
+rev::CANSparkMax *SFleftMotor, *SFrightMotor;
 
   void disableP();
   void enableP();
@@ -60,6 +64,7 @@ void PIDTurnModified(float degreesClockwise, float maxAcc);
   virtual void setRightMotorPosition(int ticks) = 0;
   virtual void setLeftMotorSetpoint(int ticks) = 0;
   virtual void setRightMotorSetpoint(int ticks) = 0;
+ // virtual void setMaxVelocity(int ticks) = 0;
   virtual void setP(double value) = 0;
   virtual void setI(double value) = 0;
   virtual void setD(double value) = 0;

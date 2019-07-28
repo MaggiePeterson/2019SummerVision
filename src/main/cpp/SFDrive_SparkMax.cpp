@@ -11,6 +11,8 @@ SFDrive_SparkMax::SFDrive_SparkMax(rev::CANSparkMax * lMotor, rev::CANSparkMax *
 {  
    m_leftMotor = lMotor;
    m_rightMotor = rMotor;
+   SFrightMotor = rMotor;
+   SFleftMotor = lMotor;
    m_P = P;
    m_I = I;
    m_D = D;
@@ -18,6 +20,8 @@ SFDrive_SparkMax::SFDrive_SparkMax(rev::CANSparkMax * lMotor, rev::CANSparkMax *
    initPID();
    m_ticksPerRev = 42;
    m_minDecelVel = 27 / m_wheelCircumference * m_ticksPerRev;
+
+
 }
 
 void SFDrive_SparkMax::setLeftMotor(double value)
