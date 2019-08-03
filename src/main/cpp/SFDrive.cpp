@@ -326,32 +326,60 @@ bool SFDrive::PIDTurnThread(float degreesClockwise, float radius, float maxVel, 
 
 void SFDrive::PIDTurnInPlace(float degreesClockwise, float maxAcc){
 
-   maxAcc = .1;
+   maxAcc = 386.09*.3;
+
+   frc::SmartDashboard::GetNumber("P: ", m_P);
+   frc::SmartDashboard::GetNumber("I: ", m_I);
+   frc::SmartDashboard::GetNumber("D: ", m_D);
 
    disableP();
    setLeftMotorPosition(0);
    setRightMotorPosition(0);
    setLeftMotorSetpoint(0);
    setRightMotorSetpoint(0);
+   m_P=.6 * 2;
+   m_I =0.0;
+   m_D=1.2*1.5;
+
+   SFleftMotor->GetPIDController().SetP(m_P);
+   SFleftMotor->GetPIDController().SetI(m_I);
+   SFleftMotor->GetPIDController().SetD(m_D);
+   SFrightMotor->GetPIDController().SetP(m_P);
+   SFrightMotor->GetPIDController().SetI(m_I);
+   SFrightMotor->GetPIDController().SetD(m_D);
+
    enableP();
 
-   int setPoint = ((abs(degreesClockwise)*(m_wheelTrack)*m_PI)/360.0) * (m_ticksPerRev/m_wheelCircumference);
-   double timeFinal = pow((degreesClockwise * m_wheelTrack * m_PI)/(180.0 * maxAcc), 0.5); //time it takes to reach setpoint
+
+
+
+   double setPoint = 46*5.9;//double(abs(degreesClockwise)/360.0)*5.9;
+   double timeFinal = pow(2.0*setPoint/maxAcc, 0.5); //time it takes to reach setpoint
 
    double timeStart = Timer().GetFPGATimestamp();
+   frc::SmartDashboard::PutNumber("TimeFinal: ", timeFinal);
+   frc::SmartDashboard::PutNumber("time start: ", timeStart);
+   
    
    while(Timer().GetFPGATimestamp() < timeStart + timeFinal){ //until reach time
+   
+   frc::SmartDashboard::PutNumber("curr time: ", Timer().GetFPGATimestamp());
 
       double setMotor = (Timer().GetFPGATimestamp() - timeStart)/timeFinal * setPoint;
+      frc::SmartDashboard::PutNumber("setpoint: ", setMotor);
+      frc::SmartDashboard::PutNumber("motor : ", setMotor);
 
       if(degreesClockwise < 0 ){ //turn left
-         setLeftMotorSetpoint(-setMotor);
+         setLeftMotorSetpoint(setMotor);
          setRightMotorSetpoint(setMotor);
       }
       if(degreesClockwise > 0 ){ //turn right
          setLeftMotorSetpoint(setMotor);
-         setRightMotorSetpoint(-setMotor);
+         setRightMotorSetpoint(setMotor);
       } 
+
+      frc::SmartDashboard::PutNumber("left: ", SFleftMotor->GetEncoder().GetPosition());
+      frc::SmartDashboard::PutNumber("right: ", SFrightMotor->GetEncoder().GetPosition());
 
    }
 

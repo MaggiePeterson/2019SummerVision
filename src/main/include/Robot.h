@@ -37,11 +37,12 @@ class Robot : public frc::TimedRobot {
   const int driveMotorCurrentLimit = 40;
   const int ticksPerRev = 42;
   const double wheelCircumference = 6 * 3.14159;
-  const double pConstantDrive = 0.01;
-  const double iConstantDrive = 1;
+  const double pConstantDrive = 4;
+  const double iConstantDrive = 0;
   const double dConstantDrive = 0;
   const double fConstantDrive = 0;
   const int maxAccel = 8000;
+
 
   UDPClient * metrics =   metrics = new UDPClient;
 

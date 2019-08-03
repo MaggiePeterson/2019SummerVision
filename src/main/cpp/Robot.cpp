@@ -25,8 +25,24 @@ void Robot::RobotInit() {
    // lMotorFront->SetInverted(false);
     lMotorBack->Follow(*lMotorFront, false);
 
-    metrics->setup_socket();
+    double min = 0;
+    double max = 10;
 
+      frc::SmartDashboard::PutNumber("P: ", pConstantDrive);
+      frc::SmartDashboard::PutNumber("I: ", iConstantDrive);
+      frc::SmartDashboard::PutNumber("D: ", dConstantDrive);
+       
+
+      frc::SmartDashboard::PutNumber("Min output: ", min);
+      frc::SmartDashboard::PutNumber("Max output: ",max );
+
+     // lMotorFront->GetPIDController().SetOutputRange(min, max);
+     // rMotorFront->GetPIDController().SetOutputRange(min, max);
+
+
+    
+
+    
     
 }
 
@@ -54,12 +70,12 @@ void Robot::RobotPeriodic() {}
 void Robot::AutonomousInit() {
 
   
-  metrics->UDPReadThread();
+ // metrics->UDPReadThread();
   
-  double angle = metrics->getAngle();
-  double distance = metrics->getDistance();
+ // double angle = metrics->getAngle();
+ // double distance = metrics->getDistance();
 
- // robot->PIDTurnInPlace(15, maxAccel);
+  robot->PIDTurnInPlace(360, maxAccel);
   frc::DriverStation::ReportError("in auton");
 
 
@@ -68,10 +84,9 @@ void Robot::AutonomousInit() {
 
 void Robot::AutonomousPeriodic() { 
          
-   frc::DriverStation::ReportError("left: " + std::to_string(lMotorFront->GetEncoder().GetPosition()) + " right "+ std::to_string(rMotorFront->GetEncoder().GetPosition()));
-
-
- 
+  frc::DriverStation::ReportError("left: " + std::to_string(lMotorFront->GetEncoder().GetPosition()) + " right "+ std::to_string(rMotorFront->GetEncoder().GetPosition()));
+  frc::SmartDashboard::PutNumber("left auton: ", lMotorFront->GetEncoder().GetPosition());
+  frc::SmartDashboard::PutNumber("right auton: ", rMotorFront->GetEncoder().GetPosition());
 
 }
 
